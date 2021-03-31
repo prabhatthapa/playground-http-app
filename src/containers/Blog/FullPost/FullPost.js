@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { Component } from "react";
+import axiosInstance from "../../../axios";
 
 import "./FullPost.css";
 
@@ -8,22 +8,26 @@ class FullPost extends Component {
     loadedPost: null,
   };
 
-  componentDidUpdate() {
-    if (this.props.postId) {
+  componentDidMount() {
+    console.log(this.props);
+    console.log(`---------`);
+    if (this.props.match.params.id) {
       if (
         !this.state.loadedPost ||
         (this.state.loadedPost &&
-          this.state.loadedPost.id !== this.props.postId)
+          this.state.loadedPost.id !== this.props.match.params.id)
       ) {
-        axios.get(`/posts/${this.props.postId}`).then((response) => {
-          this.setState({ loadedPost: response.data });
-        });
+        axiosInstance
+          .get(`/posts/${this.props.match.params.id}`)
+          .then((response) => {
+            this.setState({ loadedPost: response.data });
+          });
       }
     }
   }
 
   deletePostHandler = () => {
-    axios.delete(`/posts/${this.props.postId}`).then((response) => {
+    axiosInstance.delete(`/posts/${this.props.postId}`).then((response) => {
       console.log(response);
     });
   };
