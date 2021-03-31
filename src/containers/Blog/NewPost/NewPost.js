@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { Component } from "react";
+import axiosInstance from "../../../axios";
 
 import "./NewPost.css";
 
@@ -17,8 +17,9 @@ class NewPost extends Component {
       author: this.state.author,
     };
 
-    axios.post("/posts", postData).then((response) => {
+    axiosInstance.post("/posts", postData).then((response) => {
       console.log(response);
+      this.props.history.push("/posts");
     });
   };
 
