@@ -4,10 +4,17 @@ import { Route, NavLink, Switch, Redirect } from "react-router-dom";
 import "./Blog.css";
 import Posts from "./Posts/Posts";
 import NewPost from "./NewPost/NewPost";
-import FullPost from "./FullPost/FullPost";
-// import axios from "axios";
+import asyncComponent from "../../hoc/asyncComponent";
 
+const AsyncNewPost = asyncComponent(() => {
+  return import("./NewPost/NewPost"); // A special method which will import whatever been given to it when this import will be called.
+  //This will be called when asyncComponent function will be called.
+});
 class Blog extends Component {
+  state = {
+    auth: true,
+  };
+
   render() {
     return (
       <div className="Blog">
@@ -26,7 +33,9 @@ class Blog extends Component {
           </nav>
         </header>
         <Switch>
-          <Route path="/new-post" exact component={NewPost} />
+          {this.state.auth ? (
+            <Route path="/new-post" exact component={AsyncNewPost} />
+          ) : null}
           <Route path="/posts" component={Posts} />
           <Redirect from="/" to="/posts" />
         </Switch>
